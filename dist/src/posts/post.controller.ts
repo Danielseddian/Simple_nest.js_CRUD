@@ -9,12 +9,12 @@ import {
   Body,
   Param,
 } from '@nestjs/common';
-import { PostsService } from './posts.service';
+import { PostService } from './post.service';
 import { Post as UserPost } from './post.entity';
 
 @Controller('posts')
-export class PostsController {
-  constructor(private readonly postsService: PostsService) {}
+export class PostController {
+  constructor(private readonly postsService: PostService) {}
   @Post()
   async create(@Body() body: UserPost): Promise<UserPost> {
     const post: UserPost = await this.postsService.createPost(
