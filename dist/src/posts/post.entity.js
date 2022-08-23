@@ -11,12 +11,11 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Post = void 0;
 const typeorm_1 = require("typeorm");
-let Post = class Post {
+const abstract_entity_1 = require("../common/abstract.entity");
+const user_module_1 = require("../users/user.module");
+const user_entity_1 = require("../users/user.entity");
+let Post = class Post extends abstract_entity_1.AbstractEntity {
 };
-__decorate([
-    (0, typeorm_1.PrimaryGeneratedColumn)(),
-    __metadata("design:type", Number)
-], Post.prototype, "id", void 0);
 __decorate([
     (0, typeorm_1.Column)(),
     __metadata("design:type", String)
@@ -25,6 +24,10 @@ __decorate([
     (0, typeorm_1.Column)(),
     __metadata("design:type", String)
 ], Post.prototype, "text", void 0);
+__decorate([
+    (0, typeorm_1.ManyToOne)(type => user_entity_1.User, user => user.post),
+    __metadata("design:type", user_module_1.UserModule)
+], Post.prototype, "user", void 0);
 Post = __decorate([
     (0, typeorm_1.Entity)()
 ], Post);

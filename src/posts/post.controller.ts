@@ -6,51 +6,57 @@ import {
   Delete,
   HttpCode,
   HttpStatus,
+  UseGuards,
   Body,
   Param,
 } from '@nestjs/common';
 import { PostService } from './post.service';
-import { Post as UserPost } from './post.entity';
+import { AuthGuard } from '@nestjs/passport';
+import { Post as PostEntity } from './post.entity';
+import { PostDto } from "./post.dto";
+import { User } from 'src/users/user.entity'
+import { UserDecorator } from "src/users/user.decorator";
+import { UpdateResult } from "typeorm";
 
 @Controller('posts')
 export class PostController {
   constructor(private readonly postsService: PostService) {}
   @Post()
-  async create(@Body() body: UserPost): Promise<UserPost> {
-    const post: UserPost = await this.postsService.createPost(
-      body.title,
-      body.text,
+  @UseGuards(AuthGuard())
+  async create(@Body() data: PostDto, @UserDecorator() user: User): Promise<PostEntity> {
+    const post: PostEntity = await this.postsService.createPost(
+      data,
+      user
     );
     console.log(`Новый пост: "${post.title}" успешно создан`);
     return post;
   }
   @Get()
-  getAllPosts(): Promise<UserPost[]> {
+  getAllPosts(): Promise<PostEntity[]> {
     return this.postsService.getAll();
   }
   @Get(':id')
-  async getPost(@Param('id') postId: number): Promise<UserPost> {
-    const post: UserPost = await this.postsService.getOneById(postId);
+  async getPost(@Param('id') postId: number): Promise<PostEntity> {
+    const post: PostEntity = await this.postsService.getOneById(postId);
     return post;
   }
   @Delete(':id')
   @HttpCode(HttpStatus.NO_CONTENT)
-  async remove(@Param('id') postId: number): Promise<UserPost> {
-    const post: UserPost = await this.postsService.deletePost(postId);
+  async remove(@Param('id') postId: number): Promise<PostEntity> {
+    const post: PostEntity = await this.postsService.deletePost(postId);
     console.log(`Пост № ${post.id} удалён.`);
     return post;
   }
   @Patch(':id')
   async update(
     @Param('id') postId: number,
-    @Body() body: UserPost,
-  ): Promise<UserPost> {
-    const post: UserPost = await this.postsService.updatePost(
+    @Body() data: PostDto,
+  ): Promise<UpdateResult> {
+      const post: UpdateResult = await this.postsService.updatePost(
       postId,
-      body.title,
-      body.text,
+      data,
     );
-    console.log(`Пост № ${post.id} обновлён.`);
+    console.log(`Пост № ${postId} обновлён.`);
     return post;
   }
 }

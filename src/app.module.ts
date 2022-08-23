@@ -5,7 +5,9 @@ import { DatabaseModule } from 'src/database/db.module';
 import { NODE_ENV } from './app.constant';
 import { AuthenticationModule } from 'src/authentication/authentication.module';
 import { UserModule } from './users/user.module';
-// import { PostModule } from './posts/post.module';
+import { PostModule } from './posts/post.module';
+import { AppController } from "./app.controller";
+import { AppService } from "./app.service";
 
 @Module({
   imports: [
@@ -24,8 +26,10 @@ import { UserModule } from './users/user.module';
     }),
     AuthenticationModule,
     DatabaseModule,
-    // PostModule,
+    PostModule,
     UserModule,
   ],
+  controllers: [AppController],
+  providers: [AppService],
 })
 export class AppModule {}
