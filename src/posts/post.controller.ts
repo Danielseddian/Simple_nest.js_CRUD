@@ -22,7 +22,7 @@ import { UpdateResult } from "typeorm";
 export class PostController {
   constructor(private readonly postsService: PostService) {}
   @Post()
-  @UseGuards(AuthGuard())
+  @UseGuards(AuthGuard('jwt'))
   async create(@Body() data: PostDto, @UserDecorator() user: User): Promise<PostEntity> {
     const post: PostEntity = await this.postsService.createPost(
       data,
