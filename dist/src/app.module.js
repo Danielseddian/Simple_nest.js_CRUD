@@ -14,7 +14,6 @@ const db_module_1 = require("./database/db.module");
 const app_constant_1 = require("./app.constant");
 const authentication_module_1 = require("./authentication/authentication.module");
 const user_module_1 = require("./users/user.module");
-const post_module_1 = require("./posts/post.module");
 let AppModule = class AppModule {
 };
 AppModule = __decorate([
@@ -35,7 +34,6 @@ AppModule = __decorate([
             }),
             authentication_module_1.AuthenticationModule,
             db_module_1.DatabaseModule,
-            post_module_1.PostModule,
             user_module_1.UserModule,
         ],
     })
